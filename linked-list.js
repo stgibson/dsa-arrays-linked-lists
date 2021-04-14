@@ -137,12 +137,15 @@ class LinkedList {
   /** removeAt(idx): return & remove item at idx, */
 
   removeAt(idx) {
+    let deletedNode;
     // base case 1: removing only item
     if (this.head === this.tail && idx === 0) {
+      deletedNode = this.head;
       this.head = this.tail = null;
     }
     // base case 2: deleting at head
     else if (idx === 0) {
+      deletedNode = this.head;
       this.head = this.head.next;
     }
     else {
@@ -150,6 +153,7 @@ class LinkedList {
       for (let i = 0; i < idx - 1; i++) {
         currNode = currNode.next;
       }
+      deletedNode = currNode.next;
       currNode.next = currNode.next.next;
       // check if became new tail
       if (!currNode.next) {
@@ -157,6 +161,7 @@ class LinkedList {
       }
     }
     this.length--;
+    return deletedNode.val;
   }
 
   /** average(): return an average of all values in the list */
