@@ -18,6 +18,61 @@ class LinkedList {
     for (let val of vals) this.push(val);
   }
 
+  /**
+   * sortSorted(a, b): class method that takes 2 sorted linked lists and merges
+   * them in a new sorted linked list
+   */
+
+  static sortSorted(a, b) {
+    // base case 1: both lists are empty
+    if (a.length === b.length === 0) {
+      return new LinkedList([]);
+    }
+    // base case 2: 1 list is empty
+    if (!a.length) {
+      const newList = new LinkedList([]);
+      let currNode = b.head;
+      while (currNode) {
+        newList.push(currNode.val);
+        currNode = currNode.next;
+      }
+      return newList;
+    }
+    if (!b.length) {
+      const newList = new LinkedList([]);
+      let currNode = a.head;
+      while (currNode) {
+        newList.push(currNode.val);
+        currNode = currNode.next;
+      }
+      return newList;
+    }
+
+    const newList = new LinkedList([]);    
+    let currNodeA = a.head;
+    let currNodeB = b.head;
+    while (currNodeA && currNodeB) {
+      if (currNodeA.val <= currNodeB.val) {
+        newList.push(currNodeA.val);
+        currNodeA = currNodeA.next;
+      }
+      else {
+        newList.push(currNodeB.val);
+        currNodeB = currNodeB.next;
+      }
+    }
+    // after get to end of at least one list, copy rest of values of other
+    while (currNodeA) {
+      newList.push(currNodeA.val);
+      currNodeA = currNodeA.next;
+    }
+    while (currNodeB) {
+      newList.push(currNodeB.val);
+      currNodeB = currNodeB.next;
+    }
+    return newList;
+  }
+
   /** push(val): add new value to end of list. */
 
   push(val) {
@@ -179,6 +234,70 @@ class LinkedList {
       currNode = currNode.next;
     }
     return sum / this.length;
+  }
+
+  /** reverse(): reverses list in place */
+
+  reverse() {
+    // base case for empty list or list with 1 item, do nothing
+    if (!this.length || this.head === this.tail) {
+      return;
+    }
+    let currNode = this.head;
+    let prevNode = null;
+    while (currNode) {
+      const nextNode = currNode.next;
+      currNode.next = prevNode;
+      prevNode = currNode;
+      currNode = nextNode;
+    }
+    // when currNode is null, prevNode should be tail
+    this.tail = this.head;
+    this.head = prevNode;
+  }
+
+  /**
+   * pivot(piv): puts all values less than piv on left of list before all
+   * values on the right of list
+   */
+
+  pivot(piv) {
+    // base case for empty list or list with 1 item, do nothing
+    if (!this.length || this.head === this.tail) {
+      return;
+    }
+    let prevNode = null;
+    let currNode = this.head;
+    let prevMovedNode = null;
+    while (currNode) {
+      if (currNode.val < piv) {
+        if (prevNode) {
+          prevNode.next = currNode.next;
+          if (prevMovedNode) {
+            currNode.next = prevMovedNode.next;
+            prevMovedNode.next = currNode;
+            prevMovedNode = currNode;
+          }
+          else {
+            currNode.next = this.head;
+            this.head = currNode;
+            prevMovedNode = currNode;
+          }
+          currNode = prevNode.next;
+        }
+        // if prevNode is null, only found items less than pivot
+        else {
+          prevMovedNode = currNode;
+          currNode = currNode.next;
+        }
+      }
+      else {
+        prevNode = currNode;
+        currNode = currNode.next;
+      }
+    }
+    // when currNode is null, prevNode was tail
+    this.tail = prevNode;
   }
 }
 

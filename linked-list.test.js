@@ -146,3 +146,141 @@ describe("average", function() {
     expect(lst.average()).toBe(0);
   });
 });
+
+describe("reverse", function() {
+  it("doesn't modify empty list", function() {
+    let lst = new LinkedList([]);
+    lst.reverse();
+    expect(lst.length).toBe(0);
+    expect(lst.head).toBe(null);
+    expect(lst.tail).toBe(null);
+  });
+
+  it("doesn't modify list with one item", function() {
+    let lst = new LinkedList(["a"]);
+    lst.reverse();
+    expect(lst.length).toBe(1);
+    expect(lst.head.val).toBe("a");
+    expect(lst.tail.val).toBe("a");
+  });
+
+  it("reverses list", function() {
+    let lst = new LinkedList([2, 3, 1, 1, 7, 6, 9]);
+    lst.reverse();
+    expect(lst.length).toBe(7);
+    expect(lst.head.val).toBe(9);
+    expect(lst.head.next.val).toBe(6);
+    expect(lst.head.next.next.val).toBe(7);
+    expect(lst.head.next.next.next.val).toBe(1);
+    expect(lst.head.next.next.next.next.val).toBe(1);
+    expect(lst.head.next.next.next.next.next.val).toBe(3);
+    expect(lst.tail.val).toBe(2);
+  });
+});
+
+describe("sortSorted", function() {
+  it("returns empty list when given 2 empty lists", function() {
+    let a = new LinkedList([]);
+    let b = new LinkedList([]);
+    let lst = LinkedList.sortSorted(a, b);
+    expect(lst.length).toBe(0);
+    expect(lst.head).toBe(null);
+    expect(lst.tail).toBe(null);
+  });
+
+  it("returns 1st list when only 1st list has items", function() {
+    let a = new LinkedList([1, 3, 4, 4, 5, 6, 7, 9]);
+    let b = new LinkedList([]);
+    let lst = LinkedList.sortSorted(a, b);
+    expect(lst.length).toBe(8);
+    expect(lst.head.val).toBe(1);
+    expect(lst.head.next.val).toBe(3);
+    expect(lst.head.next.next.val).toBe(4);
+    expect(lst.head.next.next.next.val).toBe(4);
+    expect(lst.head.next.next.next.next.val).toBe(5);
+    expect(lst.head.next.next.next.next.next.val).toBe(6);
+    expect(lst.head.next.next.next.next.next.next.val).toBe(7);
+    expect(lst.tail.val).toBe(9);
+  });
+
+  it("returns 2nd list when only 2nd list has items", function() {
+    let a = new LinkedList([]);
+    let b = new LinkedList([1, 3, 4, 4, 5, 6, 7, 9]);
+    let lst = LinkedList.sortSorted(a, b);
+    expect(lst.length).toBe(8);
+    expect(lst.head.val).toBe(1);
+    expect(lst.head.next.val).toBe(3);
+    expect(lst.head.next.next.val).toBe(4);
+    expect(lst.head.next.next.next.val).toBe(4);
+    expect(lst.head.next.next.next.next.val).toBe(5);
+    expect(lst.head.next.next.next.next.next.val).toBe(6);
+    expect(lst.head.next.next.next.next.next.next.val).toBe(7);
+    expect(lst.tail.val).toBe(9);
+  });
+
+  it("returns merged, sorted list of both lists", function() {
+    let a = new LinkedList([1, 3, 4, 4, 5, 6, 7, 9]);
+    let b = new LinkedList([2, 5, 8, 10]);
+    let lst = LinkedList.sortSorted(a, b);
+    expect(lst.length).toBe(12);
+    expect(lst.head.val).toBe(1);
+    expect(lst.head.next.val).toBe(2);
+    expect(lst.head.next.next.val).toBe(3);
+    expect(lst.head.next.next.next.val).toBe(4);
+    expect(lst.head.next.next.next.next.val).toBe(4);
+    expect(lst.head.next.next.next.next.next.val).toBe(5);
+    expect(lst.head.next.next.next.next.next.next.val).toBe(5);
+    expect(lst.head.next.next.next.next.next.next.next.val).toBe(6);
+    expect(lst.head.next.next.next.next.next.next.next.next.val).toBe(7);
+    expect(lst.head.next.next.next.next.next.next.next.next.next.val).toBe(8);
+    expect(lst.head.next.next.next.next.next.next.next.next.next.next.val)
+      .toBe(9);
+    expect(lst.tail.val).toBe(10);
+  });
+});
+
+describe("pivot", function() {
+  it("doesn't modify an empty list", function() {
+    let lst = new LinkedList([]);
+    lst.pivot(5);
+    expect(lst.length).toBe(0);
+    expect(lst.head).toBe(null);
+    expect(lst.tail).toBe(null);
+  });
+
+  it("doesn't modify the list if only 1 item", function() {
+    let lst = new LinkedList([4]);
+    lst.pivot(5);
+    expect(lst.length).toBe(1);
+    expect(lst.head.val).toBe(4);
+    expect(lst.tail.val).toBe(4);
+  });
+
+  it("pivots around number not in list", function() {
+    let lst = new LinkedList([7, 6, 2, 3, 9, 1, 1]);
+    lst.pivot(5);
+    expect(lst.length).toBe(7);
+    expect(lst.head.val).toBe(2);
+    expect(lst.head.next.val).toBe(3);
+    expect(lst.head.next.next.val).toBe(1);
+    expect(lst.head.next.next.next.val).toBe(1);
+    expect(lst.head.next.next.next.next.val).toBe(7);
+    expect(lst.head.next.next.next.next.next.val).toBe(6);
+    expect(lst.tail.val).toBe(9);
+  });
+
+  it("pivots around number in list", function() {
+    let lst = new LinkedList([7, 6, 2, 5, 3, 5, 9, 1, 1]);
+    lst.pivot(5);
+    expect(lst.length).toBe(9);
+    expect(lst.head.val).toBe(2);
+    expect(lst.head.next.val).toBe(3);
+    expect(lst.head.next.next.val).toBe(1);
+    expect(lst.head.next.next.next.val).toBe(1);
+    expect(lst.head.next.next.next.next.val).toBe(7);
+    expect(lst.head.next.next.next.next.next.val).toBe(6);
+    expect(lst.head.next.next.next.next.next.next.val).toBe(5);
+    expect(lst.head.next.next.next.next.next.next.next.val).toBe(5);
+    expect(lst.tail.val).toBe(9);
+  });
+});
